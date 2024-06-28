@@ -1,0 +1,5 @@
+# Http Client for Spring Boot Starter
+# Copyright (c) 2020 Yookue Ltd. All rights reserved.
+# https://yookue.com
+
+com.yookue.springstarter.httpclient.config.HttpClientAutoConfiguration
