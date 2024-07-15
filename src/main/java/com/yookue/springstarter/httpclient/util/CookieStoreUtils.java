@@ -17,9 +17,10 @@
 package com.yookue.springstarter.httpclient.util;
 
 
+import java.util.Objects;
 import java.util.StringJoiner;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.apache.commons.lang3.CharUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hc.client5.http.cookie.Cookie;
@@ -64,8 +65,8 @@ public abstract class CookieStoreUtils {
         if (CollectionUtils.isEmpty(store.getCookies())) {
             return null;
         }
-        StringJoiner joiner = new StringJoiner(StringUtils.defaultString(groupDelimiter, StringUtils.EMPTY));
-        store.getCookies().forEach(cookie -> joiner.add(StringUtils.join(cookie.getName(), StringUtils.defaultString(keyValueDelimiter, StringUtils.EMPTY), StringUtils.defaultString(cookie.getValue()))));
+        StringJoiner joiner = new StringJoiner(Objects.toString(groupDelimiter, StringUtils.EMPTY));
+        store.getCookies().forEach(cookie -> joiner.add(StringUtils.join(cookie.getName(), Objects.toString(keyValueDelimiter, StringUtils.EMPTY), StringUtils.defaultString(cookie.getValue()))));
         return joiner.toString();
     }
 }

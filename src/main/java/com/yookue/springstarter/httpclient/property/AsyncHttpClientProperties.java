@@ -23,7 +23,6 @@ import org.apache.hc.client5.http.async.AsyncExecChainHandler;
 import org.apache.hc.client5.http.nio.AsyncClientConnectionManager;
 import org.apache.hc.core5.http.config.CharCodingConfig;
 import org.apache.hc.core5.http.config.Http1Config;
-import org.apache.hc.core5.http2.HttpVersionPolicy;
 import org.apache.hc.core5.http2.config.H2Config;
 import org.apache.hc.core5.reactor.IOReactorConfig;
 import lombok.Getter;
@@ -46,7 +45,6 @@ public class AsyncHttpClientProperties extends AbstractHttpClientProperties {
     private Class<? extends Http1Config> h1Config;
     private Class<? extends H2Config> h2Config;
     private Class<? extends IOReactorConfig> ioReactorConfig;
-    private Class<? extends HttpVersionPolicy> versionPolicy;
     private Class<? extends ThreadFactory> threadFactory;
     private Map<String, Class<? extends AsyncExecChainHandler>> execInterceptors;
 }

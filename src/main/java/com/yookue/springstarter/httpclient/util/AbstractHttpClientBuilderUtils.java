@@ -17,11 +17,10 @@
 package com.yookue.springstarter.httpclient.util;
 
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hc.client5.http.config.RequestConfig;
-import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
 import com.yookue.springstarter.httpclient.property.AbstractHttpClientProperties;
@@ -42,9 +41,6 @@ public abstract class AbstractHttpClientBuilderUtils {
         }
         RequestConfig.Builder builder = RequestConfig.custom();
         builder.setExpectContinueEnabled(BooleanUtils.isTrue(properties.getExpectContinueEnabled()));
-        if (StringUtils.isNotBlank(properties.getProxyHost()) && properties.getProxyPort() != null && properties.getProxyPort() > 0) {
-            builder.setProxy(new HttpHost(properties.getProxyHost(), properties.getProxyPort()));
-        }
         if (StringUtils.isNotBlank(properties.getCookieSpec())) {
             builder.setCookieSpec(properties.getCookieSpec());
         }
@@ -58,9 +54,6 @@ public abstract class AbstractHttpClientBuilderUtils {
         builder.setProxyPreferredAuthSchemes(properties.getProxyPreferredAuthSchemes());
         if (properties.getRequestTimeout() != null) {
             builder.setConnectionRequestTimeout(Timeout.ofMilliseconds(properties.getRequestTimeout().toMillis()));
-        }
-        if (properties.getConnectTimeout() != null) {
-            builder.setConnectTimeout(Timeout.ofMilliseconds(properties.getConnectTimeout().toMillis()));
         }
         if (properties.getResponseTimeout() != null) {
             builder.setResponseTimeout(Timeout.ofMilliseconds(properties.getResponseTimeout().toMillis()));

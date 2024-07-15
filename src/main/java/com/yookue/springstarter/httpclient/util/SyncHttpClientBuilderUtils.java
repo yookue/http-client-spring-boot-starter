@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hc.client5.http.auth.AuthSchemeFactory;
@@ -31,6 +31,7 @@ import org.apache.hc.client5.http.cookie.CookieSpecFactory;
 import org.apache.hc.client5.http.entity.InputStreamFactory;
 import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
 import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.http.HttpRequestInterceptor;
 import org.apache.hc.core5.http.HttpResponseInterceptor;
 import org.apache.hc.core5.http.config.LookupRegistryUtils;
@@ -53,6 +54,9 @@ public abstract class SyncHttpClientBuilderUtils {
     @Nonnull
     public static HttpClientBuilder clientBuilder(@Nonnull SyncHttpClientProperties properties) throws BeanInstantiationException {
         HttpClientBuilder builder = HttpClientBuilder.create();
+        if (StringUtils.isNotBlank(properties.getProxyHost()) && properties.getProxyPort() != null && properties.getProxyPort() > 0) {
+            builder.setProxy(new HttpHost(properties.getProxyHost(), properties.getProxyPort()));
+        }
         if (BooleanUtils.isFalse(properties.getAuthCachingEnabled())) {
             builder.disableAuthCaching();
         }

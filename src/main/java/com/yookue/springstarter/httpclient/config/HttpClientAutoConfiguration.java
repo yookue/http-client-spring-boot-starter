@@ -17,7 +17,7 @@
 package com.yookue.springstarter.httpclient.config;
 
 
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import org.apache.hc.client5.http.async.HttpAsyncClient;
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.core5.http.HttpVersion;

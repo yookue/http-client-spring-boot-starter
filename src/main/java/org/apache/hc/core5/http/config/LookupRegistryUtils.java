@@ -18,7 +18,7 @@ package org.apache.hc.core5.http.config;
 
 
 import java.util.Map;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import org.apache.commons.lang3.ObjectUtils;
 
 

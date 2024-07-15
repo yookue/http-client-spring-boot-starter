@@ -63,6 +63,8 @@ public abstract class AbstractHttpClientProperties implements Serializable {
     private Boolean enabled = true;
 
     private String userAgent = "Apache-HttpClient";    // $NON-NLS-1$
+    private String proxyHost;
+    private Integer proxyPort;
 
     private Boolean authCachingEnabled;
     private Boolean automaticRetriesEnabled;
@@ -114,8 +116,6 @@ public abstract class AbstractHttpClientProperties implements Serializable {
     public static class DefaultRequestConfig implements Serializable {
         private Boolean enabled;
         private Boolean expectContinueEnabled;
-        private String proxyHost;
-        private Integer proxyPort;
         private String cookieSpec;
         private Boolean redirectsEnabled = Boolean.TRUE;
         private Boolean circularRedirectsAllowed;
@@ -123,9 +123,6 @@ public abstract class AbstractHttpClientProperties implements Serializable {
         private Boolean authenticationEnabled = Boolean.TRUE;
         private List<String> targetPreferredAuthSchemes;
         private List<String> proxyPreferredAuthSchemes;
-
-        @DurationUnit(value = ChronoUnit.SECONDS)
-        private Duration connectTimeout = Duration.ofSeconds(30L);
 
         @DurationUnit(value = ChronoUnit.SECONDS)
         private Duration requestTimeout = Duration.ofSeconds(30L);

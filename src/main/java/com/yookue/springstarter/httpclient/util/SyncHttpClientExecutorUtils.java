@@ -28,29 +28,25 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Objects;
-import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.classic.methods.HttpUriRequestBase;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.entity.mime.MultipartEntityBuilder;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
 import org.apache.hc.core5.http.ClassicHttpRequest;
 import org.apache.hc.core5.http.ClassicHttpResponse;
 import org.apache.hc.core5.http.ContentType;
-import org.apache.hc.core5.http.HttpException;
 import org.apache.hc.core5.http.HttpHeaders;
-import org.apache.hc.core5.http.HttpResponse;
 import org.apache.hc.core5.http.HttpStatus;
 import org.apache.hc.core5.http.NameValuePair;
 import org.apache.hc.core5.http.io.HttpClientResponseHandler;
 import org.apache.hc.core5.http.io.support.ClassicRequestBuilder;
 import org.apache.hc.core5.http.protocol.HttpContext;
 import org.springframework.util.CollectionUtils;
-import com.yookue.springstarter.httpclient.facade.HttpResponseCallback;
-import com.yookue.springstarter.httpclient.support.HttpResponsePacket;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -66,79 +62,45 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @SuppressWarnings({"unused", "BooleanMethodIsAlwaysInverted", "UnusedReturnValue", "JavadocDeclaration", "JavadocLinkAsPlainText"})
 public abstract class SyncHttpClientExecutorUtils {
-    @Nonnull
-    public static HttpResponsePacket fetchResponse(@Nonnull HttpClient client, @Nonnull ClassicHttpRequest request) throws IOException {
-        return fetchResponse(client, request, null);
-    }
-
-    @Nonnull
-    public static HttpResponsePacket fetchResponse(@Nonnull HttpClient client, @Nonnull ClassicHttpRequest request, @Nullable HttpContext context) throws IOException {
-        HttpClientResponseHandler<HttpResponsePacket> handler = new HttpClientResponseHandler<HttpResponsePacket>() {
-            @Nonnull
-            @Override
-            public HttpResponsePacket handleResponse(@Nonnull ClassicHttpResponse response) {
-                return new HttpResponsePacket(response);
-            }
-        };
-        return client.execute(request, handler);
-    }
-
-    public static void executeCallback(@Nonnull HttpClient client, @Nonnull ClassicHttpRequest request, @Nonnull HttpResponseCallback callback) throws HttpException, IOException, URISyntaxException {
-        executeCallback(client, request, null, callback);
-    }
-
-    public static void executeCallback(@Nonnull HttpClient client, @Nonnull ClassicHttpRequest request, @Nullable HttpContext context, @Nonnull HttpResponseCallback callback) throws HttpException, IOException, URISyntaxException {
-        executeCallback(client, request, null, callback, false);
-    }
-
-    public static void executeCallback(@Nonnull HttpClient client, @Nonnull ClassicHttpRequest request, @Nullable HttpContext context, @Nonnull HttpResponseCallback callback, boolean closeResponse) throws HttpException, IOException, URISyntaxException {
+    public static <T> T executeHandler(@Nonnull HttpClient client, @Nonnull ClassicHttpRequest request, @Nullable HttpContext context, @Nonnull HttpClientResponseHandler<? extends T> handler) throws IOException, URISyntaxException {
         if (log.isDebugEnabled()) {
             log.debug("Preparing to visit: {}", request.getUri());
         }
         if (!request.containsHeader(HttpHeaders.ACCEPT)) {
             request.addHeader(HttpHeaders.ACCEPT, ContentType.WILDCARD.getMimeType());
         }
-        HttpResponse response = client.execute(request, context);
-        if (response != null) {
-            callback.process(new HttpResponsePacket(response));
-        }
-        if (closeResponse && response instanceof CloseableHttpResponse) {
-            ((CloseableHttpResponse) response).close();
-        }
+        return client.execute(request, context, handler);
     }
 
-    public static boolean downloadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull String pathname) throws IOException {
+    public static boolean downloadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull String pathname) throws IOException, URISyntaxException {
         return downloadSimply(client, uri, pathname, RequestConfigUtils.withDefaultTimeouts());
     }
 
-    public static boolean downloadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull String pathname, @Nullable RequestConfig config) throws IOException {
-        if (StringUtils.isNoneBlank(uri, pathname)) {
-            return downloadSimply(client, uri, Files.newOutputStream(Paths.get(pathname)), config);
-        }
-        return false;
+    public static boolean downloadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull String pathname, @Nullable RequestConfig config) throws IOException, URISyntaxException {
+        return StringUtils.isNoneBlank(uri, pathname) && downloadSimply(client, uri, Files.newOutputStream(Paths.get(pathname)), config);
     }
 
-    public static boolean downloadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull File output) throws IOException {
+    public static boolean downloadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull File output) throws IOException, URISyntaxException {
         return downloadSimply(client, uri, output, RequestConfigUtils.withDefaultTimeouts());
     }
 
-    public static boolean downloadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull File output, @Nullable RequestConfig config) throws IOException {
+    public static boolean downloadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull File output, @Nullable RequestConfig config) throws IOException, URISyntaxException {
         return downloadSimply(client, uri, output, config, null, null);
     }
 
-    public static boolean downloadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull File output, @Nullable RequestConfig config, @Nullable List<NameValuePair> parameters, @Nullable Charset charset) throws IOException {
+    public static boolean downloadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull File output, @Nullable RequestConfig config, @Nullable List<NameValuePair> parameters, @Nullable Charset charset) throws IOException, URISyntaxException {
         return downloadSimply(client, uri, Files.newOutputStream(output.toPath()), config, null, null);
     }
 
-    public static boolean downloadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull OutputStream output) throws IOException {
+    public static boolean downloadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull OutputStream output) throws IOException, URISyntaxException {
         return downloadSimply(client, uri, output, RequestConfigUtils.withDefaultTimeouts());
     }
 
-    public static boolean downloadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull OutputStream output, @Nullable RequestConfig config) throws IOException {
+    public static boolean downloadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull OutputStream output, @Nullable RequestConfig config) throws IOException, URISyntaxException {
         return downloadSimply(client, uri, output, config, null, null);
     }
 
-    public static boolean downloadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull OutputStream output, @Nullable RequestConfig config, @Nullable List<NameValuePair> parameters, @Nullable Charset charset) throws IOException {
+    public static boolean downloadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull OutputStream output, @Nullable RequestConfig config, @Nullable List<NameValuePair> parameters, @Nullable Charset charset) throws IOException, URISyntaxException {
         if (StringUtils.isNotBlank(uri)) {
             config = ObjectUtils.defaultIfNull(config, RequestConfigUtils.withDefaultTimeouts());
             charset = ObjectUtils.defaultIfNull(charset, StandardCharsets.UTF_8);
@@ -150,32 +112,40 @@ public abstract class SyncHttpClientExecutorUtils {
             if (request instanceof HttpUriRequestBase) {
                 ((HttpUriRequestBase) request).setConfig(config);
             }
-            HttpClientResponseHandler<Boolean> handler = new HttpClientResponseHandler<Boolean>() {
-                @Nonnull
-                @Override
-                public Boolean handleResponse(@Nonnull ClassicHttpResponse response) throws IOException {
-                    if (response.getCode() == HttpStatus.SC_OK && response.getEntity() != null) {
-                        response.getEntity().writeTo(output);
-                        output.close();
-                        return true;
-                    }
-                    return false;
+            HttpClientResponseHandler<Boolean> handler = (@Nonnull ClassicHttpResponse response) -> {
+                if (response.getCode() == HttpStatus.SC_OK && response.getEntity() != null) {
+                    response.getEntity().writeTo(output);
+                    output.close();
+                    return true;
                 }
+                return false;
             };
-            return client.execute(request, handler);
+            return BooleanUtils.isTrue(executeHandler(client, request, null, handler));
         }
         return false;
     }
 
-    public static boolean uploadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull String formField, @Nonnull File input) throws IllegalAccessException, IOException {
+    public static boolean uploadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull String formField, @Nonnull File input) throws IllegalAccessException, IOException, URISyntaxException {
         return uploadSimply(client, uri, formField, input, RequestConfigUtils.withDefaultTimeouts());
     }
 
-    public static boolean uploadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull String formField, @Nonnull File input, @Nullable RequestConfig config) throws IllegalAccessException, IOException {
+    public static boolean uploadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull String formField, @Nonnull File input, @Nullable RequestConfig config) throws IllegalAccessException, IOException, URISyntaxException {
         return uploadSimply(client, uri, formField, input, config, null, null);
     }
 
-    public static boolean uploadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull String formField, @Nonnull File input, @Nullable RequestConfig config, @Nullable List<NameValuePair> parameters, @Nullable Charset charset) throws IllegalAccessException, IOException {
+    public static boolean uploadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull String formField, @Nonnull String pathname) throws IllegalAccessException, IOException, URISyntaxException {
+        return uploadSimply(client, uri, formField, pathname, RequestConfigUtils.withDefaultTimeouts());
+    }
+
+    public static boolean uploadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull String formField, @Nonnull String pathname, @Nullable RequestConfig config) throws IllegalAccessException, IOException, URISyntaxException {
+        return uploadSimply(client, uri, formField, pathname, config, null, null);
+    }
+
+    public static boolean uploadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull String formField, @Nonnull String pathname, @Nullable RequestConfig config, @Nullable List<NameValuePair> parameters, @Nullable Charset charset) throws IllegalAccessException, IOException, URISyntaxException {
+        return StringUtils.isNoneBlank(uri, formField, pathname) && uploadSimply(client, uri, formField, new File(pathname), config, parameters, charset);
+    }
+
+    public static boolean uploadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull String formField, @Nonnull File input, @Nullable RequestConfig config, @Nullable List<NameValuePair> parameters, @Nullable Charset charset) throws IllegalAccessException, IOException, URISyntaxException {
         if (StringUtils.isNoneBlank(uri, formField)) {
             if (!input.exists() || !input.isFile()) {
                 throw new FileNotFoundException();
@@ -194,23 +164,8 @@ public abstract class SyncHttpClientExecutorUtils {
             if (request instanceof HttpUriRequestBase) {
                 ((HttpUriRequestBase) request).setConfig(config);
             }
-            HttpResponsePacket packet = fetchResponse(client, request);
-            return packet.isOkStatus();
-        }
-        return false;
-    }
-
-    public static boolean uploadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull String formField, @Nonnull String pathname) throws IllegalAccessException, IOException {
-        return uploadSimply(client, uri, formField, pathname, RequestConfigUtils.withDefaultTimeouts());
-    }
-
-    public static boolean uploadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull String formField, @Nonnull String pathname, @Nullable RequestConfig config) throws IllegalAccessException, IOException {
-        return uploadSimply(client, uri, formField, pathname, config, null, null);
-    }
-
-    public static boolean uploadSimply(@Nonnull HttpClient client, @Nonnull String uri, @Nonnull String formField, @Nonnull String pathname, @Nullable RequestConfig config, @Nullable List<NameValuePair> parameters, @Nullable Charset charset) throws IllegalAccessException, IOException {
-        if (StringUtils.isNoneBlank(uri, formField, pathname)) {
-            return uploadSimply(client, uri, formField, new File(pathname), config, parameters, charset);
+            HttpClientResponseHandler<Boolean> handler = (@Nonnull ClassicHttpResponse response) -> response.getCode() == HttpStatus.SC_OK;
+            return BooleanUtils.isTrue(executeHandler(client, request, null, handler));
         }
         return false;
     }

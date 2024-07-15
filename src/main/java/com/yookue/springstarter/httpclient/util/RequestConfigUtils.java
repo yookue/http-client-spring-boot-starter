@@ -17,7 +17,7 @@
 package com.yookue.springstarter.httpclient.util;
 
 
-import javax.annotation.Nullable;
+import jakarta.annotation.Nullable;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.core5.util.Timeout;
 
@@ -52,7 +52,7 @@ public abstract class RequestConfigUtils {
      * @return a {@code RequestConfig} with specified timeout settings
      */
     public static RequestConfig withSpecifiedTimeouts(@Nullable Timeout requestTimeout, @Nullable Timeout connectTimeout, @Nullable Timeout responseTimeout) {
-        return RequestConfig.custom().setConnectionRequestTimeout(requestTimeout).setConnectTimeout(connectTimeout).setResponseTimeout(responseTimeout).build();
+        return RequestConfig.custom().setConnectionRequestTimeout(requestTimeout).setResponseTimeout(responseTimeout).build();
     }
 
     /**
@@ -69,9 +69,6 @@ public abstract class RequestConfigUtils {
         RequestConfig.Builder builder = RequestConfig.copy(config);
         if (config.getConnectionRequestTimeout() == null || config.getConnectionRequestTimeout().isDisabled()) {
             builder.setConnectionRequestTimeout(REQUEST_TIMEOUT);
-        }
-        if (config.getConnectTimeout() == null || config.getConnectTimeout().isDisabled()) {
-            builder.setConnectTimeout(CONNECT_TIMEOUT);
         }
         if (config.getResponseTimeout() == null || config.getResponseTimeout().isDisabled()) {
             builder.setResponseTimeout(RESPONSE_TIMEOUT);

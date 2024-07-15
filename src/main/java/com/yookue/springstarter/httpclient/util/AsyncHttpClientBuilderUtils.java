@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import javax.annotation.Nonnull;
+import jakarta.annotation.Nonnull;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.hc.client5.http.async.AsyncExecChainHandler;
@@ -30,6 +30,7 @@ import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.cookie.CookieSpecFactory;
 import org.apache.hc.client5.http.impl.async.HttpAsyncClientBuilder;
 import org.apache.hc.core5.http.Header;
+import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.http.HttpRequestInterceptor;
 import org.apache.hc.core5.http.HttpResponseInterceptor;
 import org.apache.hc.core5.http.config.LookupRegistryUtils;
@@ -52,6 +53,9 @@ public abstract class AsyncHttpClientBuilderUtils {
     @Nonnull
     public static HttpAsyncClientBuilder clientBuilder(@Nonnull AsyncHttpClientProperties properties) throws BeanInstantiationException {
         HttpAsyncClientBuilder builder = HttpAsyncClientBuilder.create();
+        if (StringUtils.isNotBlank(properties.getProxyHost()) && properties.getProxyPort() != null && properties.getProxyPort() > 0) {
+            builder.setProxy(new HttpHost(properties.getProxyHost(), properties.getProxyPort()));
+        }
         if (BooleanUtils.isFalse(properties.getAuthCachingEnabled())) {
             builder.disableAuthCaching();
         }
@@ -172,9 +176,6 @@ public abstract class AsyncHttpClientBuilderUtils {
         }
         if (properties.getIoReactorConfig() != null) {
             builder.setIOReactorConfig(BeanUtils.instantiateClass(properties.getIoReactorConfig()));
-        }
-        if (properties.getVersionPolicy() != null) {
-            builder.setVersionPolicy(BeanUtils.instantiateClass(properties.getVersionPolicy()));
         }
         if (properties.getThreadFactory() != null) {
             builder.setThreadFactory(BeanUtils.instantiateClass(properties.getThreadFactory()));
