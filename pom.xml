@@ -49,8 +49,6 @@
 
         <spring-boot.version>3.3.1</spring-boot.version>
 
-        <jakarta-annotation.version>2.1.1</jakarta-annotation.version>
-
         <javadoc-docent-maven-plugin.version>2.0.0</javadoc-docent-maven-plugin.version>
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
         <maven-install-plugin.version>3.1.2</maven-install-plugin.version>
@@ -120,14 +118,13 @@
             </exclusions>
         </dependency>
         <dependency>
+            <groupId>jakarta.annotation</groupId>
+            <artifactId>jakarta.annotation-api</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>jakarta.annotation</groupId>
-            <artifactId>jakarta.annotation-api</artifactId>
-            <version>${jakarta-annotation.version}</version>
         </dependency>
         <dependency>
             <groupId>org.slf4j</groupId>
