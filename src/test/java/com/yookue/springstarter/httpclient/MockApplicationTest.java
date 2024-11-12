@@ -17,7 +17,6 @@
 package com.yookue.springstarter.httpclient;
 
 
-import java.io.IOException;
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -35,9 +34,9 @@ class MockApplicationTest {
     private HttpClient syncHttpClient;
 
     @Test
-    void syncHttpClient() throws IOException {
+    void syncHttpClient() throws Exception {
         Assertions.assertNotNull(syncHttpClient, "Sync http client can not be null");
-        String uri = "https://www.baidu.com/img/bd_logo.png", pathname = "D:/bd_logo.png";
+        String uri = "https://www.baidu.com/img/bd_logo.png", pathname = "D:/plexus-test/bd_logo.png";
         boolean download = SyncHttpClientExecutorUtils.downloadSimply(syncHttpClient, uri, pathname);
         Assertions.assertTrue(download, "downloadSimply must be true");
     }
