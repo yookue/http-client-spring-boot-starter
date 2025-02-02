@@ -22,7 +22,7 @@
 
     <groupId>com.yookue.springstarter</groupId>
     <artifactId>http-client-spring-boot-starter</artifactId>
-    <version>3.4.1</version>
+    <version>3.4.2</version>
 
     <name>${project.artifactId}</name>
     <description>Http Client for Spring Boot Starter</description>
@@ -47,7 +47,7 @@
         <project.build.resourceEncoding>${file.encoding}</project.build.resourceEncoding>
         <project.reporting.outputEncoding>${file.encoding}</project.reporting.outputEncoding>
 
-        <spring-boot.version>3.4.1</spring-boot.version>
+        <spring-boot.version>3.4.2</spring-boot.version>
 
         <javadoc-docent-maven-plugin.version>2.0.2</javadoc-docent-maven-plugin.version>
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
@@ -57,7 +57,7 @@
         <maven-resources-plugin.version>3.3.1</maven-resources-plugin.version>
         <maven-source-plugin.version>3.3.1</maven-source-plugin.version>
         <maven-gpg-plugin.version>3.2.7</maven-gpg-plugin.version>
-        <central-publishing-maven-plugin.version>0.6.0</central-publishing-maven-plugin.version>
+        <central-publishing-maven-plugin.version>0.7.0</central-publishing-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
@@ -277,10 +277,10 @@
                     <excludePackageNames>org.apache.*</excludePackageNames>
                     <links>
                         <!--
-                        <link>https://docs.spring.io/spring-boot/docs/current/api/</link>
+                        <link>https://docs.spring.io/spring-boot/docs/current/api</link>
                         -->
-                        <link>https://docs.spring.io/spring-framework/docs/current/javadoc-api/</link>
-                        <link>https://hc.apache.org/httpcomponents-client-5.4.x/current/httpclient5/apidocs/</link>
+                        <link>https://docs.spring.io/spring-framework/docs/current/javadoc-api</link>
+                        <link>https://hc.apache.org/httpcomponents-client-5.4.x/current/httpclient5/apidocs</link>
                     </links>
                     <taglets>
                         <taglet>
