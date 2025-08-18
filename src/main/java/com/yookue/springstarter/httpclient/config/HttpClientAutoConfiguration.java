@@ -22,9 +22,9 @@ import org.apache.hc.client5.http.async.HttpAsyncClient;
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.core5.http.HttpVersion;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBooleanProperty;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,7 +41,7 @@ import com.yookue.springstarter.httpclient.util.SyncHttpClientBuilderUtils;
  * @see org.apache.hc.client5.http.impl.classic.HttpClients
  */
 @Configuration(proxyBeanMethods = false)
-@ConditionalOnProperty(prefix = HttpClientAutoConfiguration.PROPERTIES_PREFIX, name = "enabled", havingValue = "true", matchIfMissing = true)
+@ConditionalOnBooleanProperty(prefix = HttpClientAutoConfiguration.PROPERTIES_PREFIX, name = "enabled", matchIfMissing = true)
 @ConditionalOnClass(value = HttpVersion.class)
 @EnableConfigurationProperties(value = HttpClientProperties.class)
 @AutoConfigureOrder(Ordered.LOWEST_PRECEDENCE - 1000)
@@ -51,7 +51,7 @@ public class HttpClientAutoConfiguration {
     public static final String ASYNC_HTTP_CLIENT = "asyncHttpClient";    // $NON-NLS-1$
 
     @Bean(name = SYNC_HTTP_CLIENT)
-    @ConditionalOnProperty(prefix = PROPERTIES_PREFIX + ".sync-client", name = "enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnBooleanProperty(prefix = PROPERTIES_PREFIX + ".sync-client", name = "enabled", matchIfMissing = true)
     @ConditionalOnClass(value = HttpClient.class)
     @ConditionalOnMissingBean(name = SYNC_HTTP_CLIENT)
     public HttpClient syncHttpClient(@Nonnull HttpClientProperties properties) {
@@ -59,7 +59,7 @@ public class HttpClientAutoConfiguration {
     }
 
     @Bean(name = ASYNC_HTTP_CLIENT)
-    @ConditionalOnProperty(prefix = PROPERTIES_PREFIX + ".async-client", name = "enabled", havingValue = "true", matchIfMissing = true)
+    @ConditionalOnBooleanProperty(prefix = PROPERTIES_PREFIX + ".async-client", name = "enabled", matchIfMissing = true)
     @ConditionalOnClass(value = HttpAsyncClient.class)
     @ConditionalOnMissingBean(name = ASYNC_HTTP_CLIENT)
     public HttpAsyncClient asyncHttpClient(@Nonnull HttpClientProperties properties) {
