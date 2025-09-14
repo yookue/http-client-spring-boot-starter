@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Yookue Ltd. All rights reserved.
+ * Copyright (c) 2020 Unikue Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.yookue.springstarter.httpclient.util;
+package cn.unikue.springstarter.httpclient.util;
 
 
 import java.util.ArrayList;
@@ -24,12 +24,11 @@ import java.util.Map;
 import jakarta.annotation.Nonnull;
 import org.apache.commons.lang3.BooleanUtils;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.hc.client5.http.async.AsyncExecChainHandler;
 import org.apache.hc.client5.http.auth.AuthSchemeFactory;
-import org.apache.hc.client5.http.classic.ExecChainHandler;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.client5.http.cookie.CookieSpecFactory;
-import org.apache.hc.client5.http.entity.InputStreamFactory;
-import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.async.HttpAsyncClientBuilder;
 import org.apache.hc.core5.http.Header;
 import org.apache.hc.core5.http.HttpHost;
 import org.apache.hc.core5.http.HttpRequestInterceptor;
@@ -40,20 +39,20 @@ import org.apache.hc.core5.util.TimeValue;
 import org.springframework.beans.BeanInstantiationException;
 import org.springframework.beans.BeanUtils;
 import org.springframework.util.CollectionUtils;
-import com.yookue.springstarter.httpclient.property.SyncHttpClientProperties;
+import cn.unikue.springstarter.httpclient.property.AsyncHttpClientProperties;
 
 
 /**
- * Utilities for building http client with {@link com.yookue.springstarter.httpclient.property.SyncHttpClientProperties}
+ * Utilities for building http client with {@link cn.unikue.springstarter.httpclient.property.AsyncHttpClientProperties}
  *
  * @author David Hsing
- * @see com.yookue.springstarter.httpclient.property.SyncHttpClientProperties
+ * @see cn.unikue.springstarter.httpclient.property.AsyncHttpClientProperties
  */
 @SuppressWarnings({"unused", "BooleanMethodIsAlwaysInverted", "UnusedReturnValue", "DuplicatedCode"})
-public abstract class SyncHttpClientBuilderUtils {
+public abstract class AsyncHttpClientBuilderUtils {
     @Nonnull
-    public static HttpClientBuilder clientBuilder(@Nonnull SyncHttpClientProperties properties) throws BeanInstantiationException {
-        HttpClientBuilder builder = HttpClientBuilder.create();
+    public static HttpAsyncClientBuilder clientBuilder(@Nonnull AsyncHttpClientProperties properties) throws BeanInstantiationException {
+        HttpAsyncClientBuilder builder = HttpAsyncClientBuilder.create();
         if (StringUtils.isNotBlank(properties.getProxyHost()) && properties.getProxyPort() != null && properties.getProxyPort() > 0) {
             builder.setProxy(new HttpHost(properties.getProxyHost(), properties.getProxyPort()));
         }
@@ -159,41 +158,33 @@ public abstract class SyncHttpClientBuilderUtils {
         if (requestConfig != null) {
             builder.setDefaultRequestConfig(requestConfig);
         }
-        // Sync customized properties
+        // Async customized properties
         if (StringUtils.isNotBlank(properties.getUserAgent())) {
             builder.setUserAgent(properties.getUserAgent());
-        }
-        if (BooleanUtils.isFalse(properties.getDefaultUserAgentEnabled())) {
-            builder.disableDefaultUserAgent();
         }
         if (properties.getConnectionManager() != null) {
             builder.setConnectionManager(BeanUtils.instantiateClass(properties.getConnectionManager()));
         }
-        if (properties.getRequestExecutor() != null) {
-            builder.setRequestExecutor(BeanUtils.instantiateClass(properties.getRequestExecutor()));
+        if (properties.getCharCodingConfig() != null) {
+            builder.setCharCodingConfig(BeanUtils.instantiateClass(properties.getCharCodingConfig()));
         }
-        if (properties.getBackoffManager() != null) {
-            builder.setBackoffManager(BeanUtils.instantiateClass(properties.getBackoffManager()));
+        if (properties.getH1Config() != null) {
+            builder.setHttp1Config(BeanUtils.instantiateClass(properties.getH1Config()));
         }
-        if (properties.getConnectionBackoffStrategy() != null) {
-            builder.setConnectionBackoffStrategy(BeanUtils.instantiateClass(properties.getConnectionBackoffStrategy()));
+        if (properties.getH2Config() != null) {
+            builder.setH2Config(BeanUtils.instantiateClass(properties.getH2Config()));
+        }
+        if (properties.getIoReactorConfig() != null) {
+            builder.setIOReactorConfig(BeanUtils.instantiateClass(properties.getIoReactorConfig()));
+        }
+        if (properties.getThreadFactory() != null) {
+            builder.setThreadFactory(BeanUtils.instantiateClass(properties.getThreadFactory()));
         }
         if (!CollectionUtils.isEmpty(properties.getExecInterceptors())) {
-            for (Map.Entry<String, Class<? extends ExecChainHandler>> entry : properties.getExecInterceptors().entrySet()) {
+            for (Map.Entry<String, Class<? extends AsyncExecChainHandler>> entry : properties.getExecInterceptors().entrySet()) {
                 if (StringUtils.isNotBlank(entry.getKey()) && entry.getValue() != null) {
                     builder.addExecInterceptorLast(entry.getKey(), BeanUtils.instantiateClass(entry.getValue()));
                 }
-            }
-        }
-        if (!CollectionUtils.isEmpty(properties.getContentDecoderFactories())) {
-            LinkedHashMap<String, InputStreamFactory> nameFactories = new LinkedHashMap<>();
-            for (Map.Entry<String, Class<? extends InputStreamFactory>> entry : properties.getContentDecoderFactories().entrySet()) {
-                if (StringUtils.isNotBlank(entry.getKey()) && entry.getValue() != null) {
-                    nameFactories.put(entry.getKey(), BeanUtils.instantiateClass(entry.getValue()));
-                }
-            }
-            if (!CollectionUtils.isEmpty(nameFactories)) {
-                builder.setContentDecoderRegistry(nameFactories);
             }
         }
         return builder;

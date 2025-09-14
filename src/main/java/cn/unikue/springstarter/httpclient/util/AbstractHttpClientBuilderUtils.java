@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Yookue Ltd. All rights reserved.
+ * Copyright (c) 2020 Unikue Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.yookue.springstarter.httpclient.util;
+package cn.unikue.springstarter.httpclient.util;
 
 
 import jakarta.annotation.Nullable;
@@ -23,14 +23,14 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.hc.client5.http.config.RequestConfig;
 import org.apache.hc.core5.util.TimeValue;
 import org.apache.hc.core5.util.Timeout;
-import com.yookue.springstarter.httpclient.property.AbstractHttpClientProperties;
+import cn.unikue.springstarter.httpclient.property.AbstractHttpClientProperties;
 
 
 /**
- * Utilities for building http client with {@link com.yookue.springstarter.httpclient.property.AbstractHttpClientProperties}
+ * Utilities for building http client with {@link cn.unikue.springstarter.httpclient.property.AbstractHttpClientProperties}
  *
  * @author David Hsing
- * @see com.yookue.springstarter.httpclient.property.AbstractHttpClientProperties
+ * @see cn.unikue.springstarter.httpclient.property.AbstractHttpClientProperties
  */
 @SuppressWarnings({"unused", "BooleanMethodIsAlwaysInverted", "UnusedReturnValue"})
 public abstract class AbstractHttpClientBuilderUtils {

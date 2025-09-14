@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Yookue Ltd. All rights reserved.
+ * Copyright (c) 2020 Unikue Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.yookue.springstarter.httpclient;
+package cn.unikue.springstarter.httpclient;
 
 
 import org.apache.hc.client5.http.classic.HttpClient;
@@ -23,8 +23,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
-import com.yookue.springstarter.httpclient.config.HttpClientAutoConfiguration;
-import com.yookue.springstarter.httpclient.util.SyncHttpClientExecutorUtils;
+import cn.unikue.springstarter.httpclient.config.HttpClientAutoConfiguration;
+import cn.unikue.springstarter.httpclient.util.SyncHttpClientExecutorUtils;
 
 
 @SpringBootTest(classes = MockApplicationInitializer.class, webEnvironment = SpringBootTest.WebEnvironment.NONE)

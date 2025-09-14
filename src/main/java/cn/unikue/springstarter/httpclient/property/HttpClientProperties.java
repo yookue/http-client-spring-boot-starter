@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2022 Yookue Ltd. All rights reserved.
+ * Copyright (c) 2022 Unikue Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
-package com.yookue.springstarter.httpclient.property;
+package cn.unikue.springstarter.httpclient.property;
 
 
 import java.io.Serializable;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import com.yookue.springstarter.httpclient.config.HttpClientAutoConfiguration;
+import cn.unikue.springstarter.httpclient.config.HttpClientAutoConfiguration;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;

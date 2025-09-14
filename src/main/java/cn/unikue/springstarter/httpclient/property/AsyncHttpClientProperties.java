@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Yookue Ltd. All rights reserved.
+ * Copyright (c) 2020 Unikue Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.yookue.springstarter.httpclient.property;
+package cn.unikue.springstarter.httpclient.property;
 
 
 import java.util.Map;
@@ -34,7 +34,7 @@ import lombok.ToString;
  * Properties for async http client
  *
  * @author David Hsing
- * @see com.yookue.springstarter.httpclient.property.AbstractHttpClientProperties
+ * @see cn.unikue.springstarter.httpclient.property.AbstractHttpClientProperties
  */
 @Getter
 @Setter

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2020 Yookue Ltd. All rights reserved.
+ * Copyright (c) 2020 Unikue Ltd. All rights reserved.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.yookue.springstarter.httpclient.config;
+package cn.unikue.springstarter.httpclient.config;
 
 
 import jakarta.annotation.Nonnull;
@@ -29,9 +29,9 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
-import com.yookue.springstarter.httpclient.property.HttpClientProperties;
-import com.yookue.springstarter.httpclient.util.AsyncHttpClientBuilderUtils;
-import com.yookue.springstarter.httpclient.util.SyncHttpClientBuilderUtils;
+import cn.unikue.springstarter.httpclient.property.HttpClientProperties;
+import cn.unikue.springstarter.httpclient.util.AsyncHttpClientBuilderUtils;
+import cn.unikue.springstarter.httpclient.util.SyncHttpClientBuilderUtils;
 
 
 /**

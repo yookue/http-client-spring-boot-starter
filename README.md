@@ -8,7 +8,7 @@ Spring Boot application integrates `HttpClient` quickly.
 
 ```xml
     <dependency>
-        <groupId>com.yookue.springstarter</groupId>
+        <groupId>cn.unikue.springstarter</groupId>
         <artifactId>http-client-spring-boot-starter</artifactId>
         <version>LATEST</version>
     </dependency>
@@ -36,7 +36,7 @@ spring:
 
 ## Document
 
-- Github: https://github.com/yookue/http-client-spring-boot-starter
+- Github: https://github.com/unikueltd/http-client-spring-boot-starter
 - HttpClient github: https://github.com/apache/httpcomponents-client
 - HttpClient homepage: https://hc.apache.org
 
@@ -52,12 +52,12 @@ See the `NOTICE.txt` file for required notices and attributions.
 
 ## Donation
 
-You like this package? Then [donate to us](https://yookue.com/donation) to support the development.
+You like this package? Then [donate to us](https://unikue.cn/donation) to support the development.
 
 ## Copyright
 
-Beijing Yookue Network Technology Ltd.
+Beijing Unikue Network Technology Ltd.
 
 ## Website
 
-- Yookue: https://yookue.com
+- Unikue: https://unikue.cn

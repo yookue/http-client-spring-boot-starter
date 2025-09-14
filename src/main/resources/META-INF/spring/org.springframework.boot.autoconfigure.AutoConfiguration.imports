@@ -1,5 +1,5 @@
 # Http Client for Spring Boot Starter
-# Copyright (c) 2020 Yookue Ltd. All rights reserved.
-# https://yookue.com
+# Copyright (c) 2020 Unikue Ltd. All rights reserved.
+# https://unikue.cn
 
-com.yookue.springstarter.httpclient.config.HttpClientAutoConfiguration
+cn.unikue.springstarter.httpclient.config.HttpClientAutoConfiguration
